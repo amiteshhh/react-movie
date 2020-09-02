@@ -7,9 +7,8 @@ function App() {
   return (
     <div className="App">
       <h3>
-        App is running in 
-        {/* experimenting inline style. Ideally we use class or define style object */}
-        <code style={{background:"rgb(31, 30, 30)", padding: "0 5px", margin: "0 5px"}}>{envName}</code> 
+        App is running in
+        <code className="App-env-label">{envName}</code>
         environment.
       </h3>
       Hello react webpack!
