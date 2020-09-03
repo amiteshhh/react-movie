@@ -5,10 +5,10 @@ const envName = process.env.production ? 'production' : 'dev';
 
 function App() {
   return (
-    <div className="App">
+    <div className="app">
       <h3>
         App is running in
-        <code className="App-env-label">{envName}</code>
+        <code className="env-label">{envName}</code>
         environment.
       </h3>
       Hello react webpack!

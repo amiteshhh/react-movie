@@ -1,4 +1,4 @@
-.App {
+.app {
   background-color: rgb(48, 48, 48);
   color: rgb(255, 255, 255);
   min-height: 100vh;
@@ -7,7 +7,7 @@
   padding: 10px 50px;
 }
 
-.App-env-label {
+.env-label {
   background: rgb(31, 30, 30);
   padding: 0 5px;
   margin: 0 5px;
