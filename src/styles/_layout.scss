@@ -1,0 +1,31 @@
+//
+.content-container {
+  background-color: $contentBg;
+  padding: 20px;
+  //   color: white;
+}
+
+.content-bg {
+  background-color: $contentBg;
+}
+
+.container-side-margin {
+  margin: 0 20px;
+}
+
+.content-margin-top {
+  margin-top: 20px;
+}
+
+.router-page-common {
+  min-height: 300px;
+  padding-top: 40px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.header-cross-icon {
+  font-size: 48px;
+  float: right;
+  margin-top: -45px;
+}

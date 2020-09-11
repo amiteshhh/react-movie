@@ -1,0 +1,23 @@
+@import '~bootstrap/scss/bootstrap';
+@import './styles/index.scss';
+
+.app {
+  background-color: $bodyBg;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 50px;
+}
+
+.app-header {
+  position: absolute;
+  left: 90px;
+  top: 20px;
+}
+
+.app-footer {
+  text-align: center;
+  padding: 15px;
+  background: rgba(52, 58, 64, 0.55);
+  font-size: 120%;
+}

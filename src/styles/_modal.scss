@@ -1,0 +1,18 @@
+.modal-black {
+  .modal-content {
+    background-color: $contentBg;
+    color: white;
+  }
+  .close {
+    color: white;
+  }
+}
+
+.modal-no-divider {
+  .modal-header {
+    border-bottom: none;
+  }
+  .modal-footer {
+    border-top: none;
+  }
+}

@@ -1,0 +1,43 @@
+.input-black,
+.input-black:focus {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.4);
+}
+
+@mixin blackInputStyleMixin {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.4);
+  color: $dimWhiteColor;
+}
+
+.black-theme-form {
+  input,
+  textarea,
+  select {
+    @include blackInputStyleMixin();
+    &:focus {
+      @include blackInputStyleMixin();
+    }
+  }
+
+  label {
+    color: var(--danger);
+  }
+}
+
+.form-footer {
+  display: flex;
+  justify-content: right;
+  margin-top: 40px;
+  justify-content: flex-end;
+
+  > button {
+    margin-left: 24px;
+  }
+}
+
+.form-title {
+  font-weight: normal;
+  margin-bottom: 24px;
+  margin-top: 16px;
+}
