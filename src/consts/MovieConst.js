@@ -1,6 +1,8 @@
-export const genres = ['Documentry', 'Comedy', 'Horror'];
+export const GENRES = ['Documentry', 'Comedy', 'Horror'];
 
-export const movieSortCritera = [
+export const DEFAULT_GENRE = 'All';
+
+export const MOVIE_SORT_CRITERIA = [
   {
     code: 'release_date',
     label: 'RELEASE DATE',
@@ -15,7 +17,7 @@ export const movieSortCritera = [
   },
 ];
 
-export const movieList = [
+export const MOVIE_LIST = [
   {
     id: 337167,
     title: 'Fifty Shades Freed',
@@ -107,3 +109,14 @@ export const movieList = [
     runtime: 140,
   },
 ];
+
+export const EMPTY_MOVIE_FORM_DATA = {
+  id: '',
+  title: '',
+  movieUrl: '',
+  tagline: '',
+  release_date: '',
+  overview: '',
+  genres: [],
+  runtime: 0,
+};

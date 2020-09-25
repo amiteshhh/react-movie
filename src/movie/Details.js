@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { MovieShape } from './MovieShape';
 
 import './Details.scss';
 
@@ -9,20 +10,8 @@ export function MovieDetails(props) {
     setMovie(props.movie);
   }, [props.movie]); // checks for changes in the values in this array
 
-  const handleSearchIconClick = () => {
-    props.onSearchIconClick();
-  };
-
   return (
     <div className="header-search-banner text-white">
-      <i
-        className="fa fa-search fa-lg text-danger"
-        role="button"
-        title="Return to search"
-        onClick={handleSearchIconClick}
-        style={{ float: 'right' }}
-        area-hidden="true"
-      ></i>
       <div className="movie-details-card">
         <img
           className="movie-details-card-img"
@@ -46,3 +35,7 @@ export function MovieDetails(props) {
     </div>
   );
 }
+
+MovieDetails.propTypes = {
+  movie: MovieShape,
+};

@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown, Modal } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 import './Card.scss';
+import { MovieShape } from './MovieShape';
 
 export function MovieCard(props) {
-  const movie = props.movie;
-  const [deleteModalShow, setDeleteModalShow] = useState(false);
+  const { movie, onDeleteClick, onDetailsClick } = props;
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   const handleConfirmDelete = () => {
-    setDeleteModalShow(false);
-    props.onDeleteClick(movie);
+    onDeleteClick(movie);
+    setIsDeleteModalVisible(false);
   };
 
   const handleDetailsClick = () => {
-    props.onDetailsClick(movie);
+    onDetailsClick(movie);
   };
 
   return (
@@ -34,7 +36,7 @@ export function MovieCard(props) {
               EDIT
             </Dropdown.Item>
             <Dropdown.Item onClick={handleDetailsClick}>VIEW DETAILS</Dropdown.Item>
-            <Dropdown.Item onClick={() => setDeleteModalShow(true)}>
+            <Dropdown.Item onClick={() => setIsDeleteModalVisible(true)}>
               DELETE
             </Dropdown.Item>
           </Dropdown.Menu>
@@ -57,8 +59,8 @@ export function MovieCard(props) {
       </div>
       <Modal
         size="md"
-        show={deleteModalShow}
-        onHide={() => setDeleteModalShow(false)}
+        show={isDeleteModalVisible}
+        onHide={() => setIsDeleteModalVisible(false)}
         centered
         dialogClassName="modal-black modal-no-divider"
         aria-labelledby="example-modal-sizes-title-lg"
@@ -80,3 +82,9 @@ export function MovieCard(props) {
     </>
   );
 }
+
+MovieCard.propTypes = {
+  movie: MovieShape,
+  onDeleteClick: PropTypes.func,
+  onDetailsClick: PropTypes.func,
+};

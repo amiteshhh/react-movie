@@ -13,7 +13,7 @@ export function MovieSearchBanner(props) {
 
   return (
     <div className="header-search-banner page-padding">
-      <Link to="/movie/0" className="btn btn-outline-danger btn-add-movie">
+      <Link to="/movie/add" className="btn btn-outline-danger btn-add-movie">
         + ADD MOVIE
       </Link>
       <h3 className="search-banner-title">Find Your Movie</h3>

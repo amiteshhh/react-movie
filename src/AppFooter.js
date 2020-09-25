@@ -1,10 +1,11 @@
 import React from 'react';
 import { LogoText } from './LogoText';
 
-export function AppFooter() {
+const AppFooter = () => {
   return (
     <div className="app-footer">
-      <LogoText/>
+      <LogoText />
     </div>
   );
 }
+export { AppFooter };

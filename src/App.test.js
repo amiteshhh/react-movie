@@ -12,10 +12,10 @@ describe('App component', () => {
   });
 
   it('renders correctly', () => {
-    const tree = renderer
+    const component = renderer
       .create(<App />)
       .toJSON();
-    expect(tree).toMatchSnapshot();
+    expect(component).toMatchSnapshot();
   });
 
 });

@@ -1,9 +1,6 @@
 @import '../styles/variables';
 
 .header-search-banner {
-  // height: 200px;
-  // background: url(https://via.placeholder.com/150) no-repeat;
-  // background-size: cover;
   background-color: $contentBg;
   padding: 20px 40px;
 }
@@ -44,7 +41,7 @@
   padding-bottom: 5px;
   margin: 0 10px 20px 20px;
 
-  > .movie-list-toolbar-item {
+  >.movie-list-toolbar-item {
     border-bottom-color: rgba(35, 35, 35, 0.5);
     border-bottom-style: outset;
     border-bottom-width: 2px;
@@ -55,7 +52,8 @@
     padding-bottom: 15px;
     padding-top: 0px;
   }
-  > *:focus {
+
+  >*:focus {
     box-shadow: none !important;
   }
 
@@ -75,7 +73,3 @@
     padding-bottom: 16px;
   }
 }
-
-// .movie-grid {
-//   //   margin: 0px 10px;
-// }
