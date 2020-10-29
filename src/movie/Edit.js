@@ -11,7 +11,7 @@ import './Edit.scss';
 
 const mapDispatchToProps = { saveMovie };
 
-const _EditMovie = ({ saveMovie }) => {
+const EditMovie = ({ saveMovie }) => {
   const [dirtyControls, setDirtyControls] = useState({});
   const [errors, setErrors] = useState({});
   const [isFormInvalid, setIsFormInvalid] = useState(true);
@@ -243,4 +243,4 @@ const _EditMovie = ({ saveMovie }) => {
   );
 };
 
-export const EditMovie = connect(null, mapDispatchToProps)(_EditMovie);
+export default connect(null, mapDispatchToProps)(EditMovie);

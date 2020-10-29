@@ -28,7 +28,7 @@ const sortMovies = (movies, sortKey) => {
 
 export const getMoviesByFilter = (state) => {
   const { activeGenre, sortKey, query } = state;
-  let movies = [...MOVIE_LIST];
+  let movies = [...state.allMovies];
   movies = filterMoviesByQuery(movies, query);
   movies = filterMoviesByGenre(movies, activeGenre);
   movies = sortMovies(movies, sortKey);

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { MovieSearchBanner, MovieList, MovieDetails } from '.';
 
-export class Home extends Component {
+export default class Home extends Component {
   constructor() {
     super();
     this.state = { query: '', movie: null };
   }
 
-  handleQueryChange = query => this.setState({ query });
+  handleQueryChange = (query) => this.setState({ query });
 
   handleDetailsClick = (movie) => {
     setTimeout(() => window.scrollTo({ left: 0, top: 0, behavior: 'smooth' }), 10);
@@ -29,18 +29,12 @@ export class Home extends Component {
               onClick={this.switchToSearchView}
               area-hidden="true"
             />
-            <MovieDetails
-              movie={movie}
-            />
+            <MovieDetails movie={movie} />
           </>
         ) : (
-            <MovieSearchBanner onQueryChange={this.handleQueryChange} />
-          )
-        }
-        <MovieList
-          query={query}
-          onDetailsClick={this.handleDetailsClick}
-        />
+          <MovieSearchBanner onQueryChange={this.handleQueryChange} />
+        )}
+        <MovieList query={query} onDetailsClick={this.handleDetailsClick} />
       </div>
     );
   }

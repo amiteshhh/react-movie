@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { MovieCard } from './Card';
+import MovieCard from './Card';
 import { GENRES, MOVIE_SORT_CRITERIA, DEFAULT_GENRE } from '../consts/MovieConst';
 
 import { getMoviesByFilter } from '../redux/selectors';
@@ -25,7 +25,7 @@ const mapDispatchToProps = {
   deleteMovie,
 };
 
-class _MovieList extends Component {
+class MovieList extends Component {
   constructor(props) {
     super(props);
   }
@@ -63,6 +63,7 @@ class _MovieList extends Component {
   };
 
   render() {
+    const { movies } = this.props;
     return (
       <div className="content-container movie-list-wrapper">
         <div className="flex-center-v text-white movie-list-toolbar">
@@ -98,10 +99,10 @@ class _MovieList extends Component {
           </select>
         </div>
         <div className="container-side-margin text-white">
-          <strong>{this.props.movies.length}</strong> movies found.
+          <strong>{movies.length}</strong> movies found.
         </div>
         <div className="flex-grid movie-grid">
-          {this.props.movies.map((movie, i) => (
+          {movies.map((movie, i) => (
             <MovieCard
               movie={movie}
               key={i}
@@ -115,9 +116,9 @@ class _MovieList extends Component {
   }
 }
 
-_MovieList.propTypes = {
+MovieList.propTypes = {
   query: PropTypes.string,
   onDetailsClick: PropTypes.func,
 };
 
-export const MovieList = connect(mapStateToProps, mapDispatchToProps)(_MovieList);
+export default connect(mapStateToProps, mapDispatchToProps)(MovieList);

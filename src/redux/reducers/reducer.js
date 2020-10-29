@@ -12,6 +12,7 @@ import {
 } from '../actionTypes';
 
 const initialState = {
+  allMovies: MOVIE_LIST,
   movies: MOVIE_LIST,
   activeGenre: DEFAULT_GENRE,
   sortKey: MOVIE_SORT_CRITERIA[0].code,
@@ -26,8 +27,9 @@ export default (state = initialState, action) => {
       return { ...state, ...action.payload };
     case DELETE_MOVIE:
       const movieToDelete = action.payload;
-      const index = MOVIE_LIST.findIndex((movie) => movie === movieToDelete);
-      MOVIE_LIST.splice(index, 1);
+      const movies = { state };
+      const index = movies.findIndex((movie) => movie === movieToDelete);
+      movies.splice(index, 1);
       return { ...state };
     default:
       return state;

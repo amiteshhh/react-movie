@@ -3,7 +3,7 @@ import { MovieShape } from './MovieShape';
 
 import './Details.scss';
 
-export function MovieDetails(props) {
+const MovieDetails = (props) => {
   const [movie, setMovie] = useState(props.movie);
   useEffect(() => {
     // action here
@@ -34,8 +34,10 @@ export function MovieDetails(props) {
       </div>
     </div>
   );
-}
+};
 
 MovieDetails.propTypes = {
   movie: MovieShape,
 };
+
+export default MovieDetails;
