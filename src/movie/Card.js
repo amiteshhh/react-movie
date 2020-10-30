@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import './Card.scss';
 import { MovieShape } from './MovieShape';
 
-export function MovieCard(props) {
+const MovieCard = (props) => {
   const { movie, onDeleteClick, onDetailsClick } = props;
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
@@ -81,10 +81,12 @@ export function MovieCard(props) {
       </Modal>
     </>
   );
-}
+};
 
 MovieCard.propTypes = {
   movie: MovieShape,
   onDeleteClick: PropTypes.func,
   onDetailsClick: PropTypes.func,
 };
+
+export default MovieCard;

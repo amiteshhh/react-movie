@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import './SearchBanner.scss';
 
-export function MovieSearchBanner(props) {
+const MovieSearchBanner = (props) => {
   const [query, setQuery] = useState('');
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -34,8 +34,10 @@ export function MovieSearchBanner(props) {
       </form>
     </div>
   );
-}
+};
 
 MovieSearchBanner.propTypes = {
   onQueryChange: PropTypes.func,
 };
+
+export default MovieSearchBanner;

@@ -1,39 +1,44 @@
 import React, { Component } from 'react';
+import { connect, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { MovieCard } from './Card';
-import {
-  GENRES,
-  MOVIE_SORT_CRITERIA,
-  MOVIE_LIST,
-  DEFAULT_GENRE,
-} from '../consts/MovieConst';
+import MovieCard from './Card';
+import { GENRES, MOVIE_SORT_CRITERIA, DEFAULT_GENRE } from '../consts/MovieConst';
 
-export class MovieList extends Component {
+import { getMoviesByFilter } from '../redux/selectors';
+import {
+  deleteMovie,
+  filterMoviesByGenre,
+  filterMoviesByQuery,
+  sortMovies,
+} from '../redux/actions';
+
+const mapStateToProps = (state) => ({
+  movies: getMoviesByFilter(state),
+  activeGenre: state.activeGenre,
+  sortKey: state.sortKey,
+});
+const mapDispatchToProps = {
+  filterMoviesByGenre,
+  sortMovies,
+  filterMoviesByQuery,
+  deleteMovie,
+};
+
+class MovieList extends Component {
   constructor(props) {
     super(props);
-    this.allMovies = MOVIE_LIST;
-
-    this.sortCriteriaList = MOVIE_SORT_CRITERIA;
-    this.sortKey = this.sortCriteriaList[0].code;
-    const filteredMovies = this.sortMovie(this.sortKey, this.allMovies);
-    this.state = { activeGenre: DEFAULT_GENRE, filteredMovies };
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.query !== this.props.query) {
-      this.filterMoviesByQuery();
+      this.handleQueryChange();
     }
   }
 
   /** Filter movie by given query text, then reset the genre to `All` and finally sort it */
-  filterMoviesByQuery() {
-    const query = this.props.query.toLowerCase();
-    let filteredMovies = !query
-      ? this.allMovies
-      : this.allMovies.filter((movie) => movie.title.toLowerCase().includes(query));
-    filteredMovies = this.sortMovie(this.sortKey, filteredMovies);
-    this.setState({ activeGenre: DEFAULT_GENRE, filteredMovies });
+  handleQueryChange() {
+    this.props.filterMoviesByQuery(this.props.query);
   }
 
   /**
@@ -41,42 +46,16 @@ export class MovieList extends Component {
    * @param {string} genre All, Horror, Comedy etc
    */
   handleGenreClick(genre) {
-    let filteredMovies =
-      genre === DEFAULT_GENRE
-        ? this.allMovies
-        : this.allMovies.filter((movie) => movie.genres.includes(genre));
-    filteredMovies = this.sortMovie(this.sortKey, filteredMovies);
-    this.setState({ activeGenre: genre, filteredMovies });
+    this.props.filterMoviesByGenre(genre);
   }
 
   /** Handles sorting event */
   handleSortChange = (event) => {
-    this.sortKey = event.target.value;
-    const filteredMovies = this.sortMovie(this.sortKey, [
-      ...this.state.filteredMovies,
-    ]);
-    this.setState({ filteredMovies });
+    this.props.sortMovies(event.target.value);
   };
 
-  /** Sort the movie by custom comparator function */
-  sortMovie(sortKey, movies) {
-    return movies.sort((obj1, obj2) => {
-      let val1 = obj1[sortKey] || '';
-      let val2 = obj2[sortKey] || '';
-      if (Array.isArray(val1)) {
-        // `genres` contains array value
-        val1 = val1.join();
-        val2 = val2.join();
-      }
-      return val1.localeCompare(val2);
-    });
-  }
-
   handleDeleteClick = (movieToDelete) => {
-    const filteredMovies = this.state.filteredMovies.filter(
-      (movie) => movie !== movieToDelete
-    );
-    this.setState({ filteredMovies });
+    this.props.deleteMovie(movieToDelete);
   };
 
   handleDetailsClick = (movieParam) => {
@@ -84,6 +63,7 @@ export class MovieList extends Component {
   };
 
   render() {
+    const { movies } = this.props;
     return (
       <div className="content-container movie-list-wrapper">
         <div className="flex-center-v text-white movie-list-toolbar">
@@ -92,7 +72,7 @@ export class MovieList extends Component {
               onClick={this.handleGenreClick.bind(this, genre)}
               className={classnames({
                 'btn text-white text-uppercase movie-list-toolbar-item': true,
-                'btn-active': this.state.activeGenre === genre,
+                'btn-active': this.props.activeGenre === genre,
               })}
               key={genre}
             >
@@ -111,7 +91,7 @@ export class MovieList extends Component {
             id="movieSortDropdown"
             onChange={this.handleSortChange}
           >
-            {this.sortCriteriaList.map((sortCriteria) => (
+            {MOVIE_SORT_CRITERIA.map((sortCriteria) => (
               <option key={sortCriteria.code} value={sortCriteria.code}>
                 {sortCriteria.label}
               </option>
@@ -119,10 +99,10 @@ export class MovieList extends Component {
           </select>
         </div>
         <div className="container-side-margin text-white">
-          <strong>{this.state.filteredMovies.length}</strong> movies found.
+          <strong>{movies.length}</strong> movies found.
         </div>
         <div className="flex-grid movie-grid">
-          {this.state.filteredMovies.map((movie, i) => (
+          {movies.map((movie, i) => (
             <MovieCard
               movie={movie}
               key={i}
@@ -140,3 +120,5 @@ MovieList.propTypes = {
   query: PropTypes.string,
   onDetailsClick: PropTypes.func,
 };
+
+export default connect(mapStateToProps, mapDispatchToProps)(MovieList);

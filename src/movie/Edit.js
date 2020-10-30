@@ -1,12 +1,17 @@
 import React, { useReducer, useState } from 'react';
 import { useParams, useHistory } from 'react-router';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Alert } from 'react-bootstrap';
 import { MOVIE_LIST, GENRES, EMPTY_MOVIE_FORM_DATA } from '../consts/MovieConst';
+import { saveMovie } from '../redux/actions';
+import { getMovieById } from '../redux/selectors';
 
 import './Edit.scss';
 
-export function EditMovie() {
+const mapDispatchToProps = { saveMovie };
+
+const EditMovie = ({ saveMovie }) => {
   const [dirtyControls, setDirtyControls] = useState({});
   const [errors, setErrors] = useState({});
   const [isFormInvalid, setIsFormInvalid] = useState(true);
@@ -16,9 +21,7 @@ export function EditMovie() {
   let { id } = useParams();
   const isAddMovie = id === 'add';
   id = Number(id); // string to numeric convrsion to match the data type with mock record
-  const movieDetails = isAddMovie
-    ? EMPTY_MOVIE_FORM_DATA
-    : MOVIE_LIST.find((movie) => movie.id === id);
+  const movieDetails = isAddMovie ? EMPTY_MOVIE_FORM_DATA : getMovieById(id);
 
   const getMultiSelectValue = (target) =>
     [...target.selectedOptions].map((option) => option.value);
@@ -85,6 +88,7 @@ export function EditMovie() {
       setIsFormErrorVisible(true);
       return;
     }
+    saveMovie(movieDetails);
     setIsSubmitSuccessVisible(true);
   };
 
@@ -237,4 +241,6 @@ export function EditMovie() {
       </form>
     </div>
   );
-}
+};
+
+export default connect(null, mapDispatchToProps)(EditMovie);
