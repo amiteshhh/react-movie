@@ -1,9 +1,11 @@
-import React, { useReducer, useState } from 'react';
-import { useParams, useHistory } from 'react-router';
+import React, { useState } from 'react';
+import { useParams } from 'react-router';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Alert } from 'react-bootstrap';
-import { MOVIE_LIST, GENRES, EMPTY_MOVIE_FORM_DATA } from '../consts/MovieConst';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { GENRES, EMPTY_MOVIE_FORM_DATA } from '../consts/MovieConst';
 import { saveMovie } from '../redux/actions';
 import { getMovieById } from '../redux/selectors';
 
@@ -12,9 +14,6 @@ import './Edit.scss';
 const mapDispatchToProps = { saveMovie };
 
 const EditMovie = ({ saveMovie }) => {
-  const [dirtyControls, setDirtyControls] = useState({});
-  const [errors, setErrors] = useState({});
-  const [isFormInvalid, setIsFormInvalid] = useState(true);
   const [isFormErrorVisible, setIsFormErrorVisible] = useState(false);
   const [isSubmitSuccessVisible, setIsSubmitSuccessVisible] = useState(false);
 
@@ -23,68 +22,40 @@ const EditMovie = ({ saveMovie }) => {
   id = Number(id); // string to numeric convrsion to match the data type with mock record
   const movieDetails = isAddMovie ? EMPTY_MOVIE_FORM_DATA : getMovieById(id);
 
+  movieDetails.movieUrl = movieDetails.movieUrl || ''; // prop missing in response
+
   const getMultiSelectValue = (target) =>
     [...target.selectedOptions].map((option) => option.value);
 
-  const handleInputChange = (event) => {
+  const handleMultiSelectValueChange = (event) => {
     const { target } = event;
-    const value =
-      target.type === 'select-multiple' // switch to switch-case if condition increases
-        ? getMultiSelectValue(target)
-        : target.value;
-
-    const { id } = target;
-    setDirtyControls({ ...dirtyControls, ...{ [id]: true } });
-    const fieldObj = { [id]: value };
-    const newState = { ...movieFormState, ...fieldObj };
-    validateForm(newState);
-    dispatchInputChange(fieldObj);
+    const value = getMultiSelectValue(target);
+    formik.setFieldValue(target.id, value);
   };
 
   const resetForm = () => {
-    setIsFormErrorVisible(false);
-    dispatchInputChange(movieDetails);
+    formik.resetForm();
   };
 
-  const validateForm = (movieFormState) => {
-    /// TODO: can be more generic to support different kind of validation error for a field
-    /// we can create a map like `fieldConfig` for a field which can store label, error message etc.
-    const errors = {};
-    let isFormInvalid = false;
-    const requiredFieldIds = [
-      'title',
-      'release_date',
-      'movieUrl',
-      'overview',
-      'runtime',
-    ];
-    requiredFieldIds.forEach((id) => {
-      const isFieldInvalid = !movieFormState[id];
-      if (isFieldInvalid) {
-        isFormInvalid = true;
-        errors[id] = 'This field is required'; // a map can be createad for more specific message
-      } else {
-        errors[id] = isFieldInvalid;
-      }
-    });
-    setIsFormInvalid(isFormInvalid);
-    setErrors(errors);
-    return isFormInvalid;
-  };
-
-  const formReducer = (movieFormState, newMovieFormState) => ({
-    ...movieFormState,
-    ...newMovieFormState,
+  const validationSchema = Yup.object({
+    title: Yup.string()
+      .max(100, 'Must be 100 characters or less')
+      .required('Required'),
+    release_date: Yup.date().required('Required'),
+    movieUrl: Yup.string().url('Invalid url address').required('Required'),
+    runtime: Yup.number()
+      .min(10, 'Must be at least 10 minutes')
+      .required('Required'),
   });
 
-  const [movieFormState, dispatchInputChange] = useReducer(
-    formReducer,
-    movieDetails
-  );
+  const formik = useFormik({
+    initialValues: movieDetails,
+    validationSchema,
+  });
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (isFormInvalid) {
+    if (!formik.isValid) {
       setIsFormErrorVisible(true);
       return;
     }
@@ -106,7 +77,7 @@ const EditMovie = ({ saveMovie }) => {
               type="text"
               className="form-control form-control-lg"
               id="id"
-              defaultValue={movieFormState.id}
+              defaultValue={id}
             />
           </div>
         )}
@@ -117,11 +88,10 @@ const EditMovie = ({ saveMovie }) => {
             autoFocus
             className="form-control form-control-lg"
             id="title"
-            value={movieFormState.title}
-            onChange={handleInputChange}
+            {...formik.getFieldProps('title')}
           />
-          {dirtyControls.title && errors.title && (
-            <div className="field-error-message">{errors.title}</div>
+          {formik.touched.title && formik.errors.title && (
+            <div className="field-error-message">{formik.errors.title}</div>
           )}
         </div>
         <div className="form-group">
@@ -130,11 +100,10 @@ const EditMovie = ({ saveMovie }) => {
             type="date"
             className="form-control form-control-lg"
             id="release_date"
-            value={movieFormState.release_date}
-            onChange={handleInputChange}
+            {...formik.getFieldProps('release_date')}
           />
-          {dirtyControls.release_date && errors.release_date && (
-            <div className="field-error-message">{errors.release_date}</div>
+          {formik.touched.release_date && formik.errors.release_date && (
+            <div className="field-error-message">{formik.errors.release_date}</div>
           )}
         </div>
         <div className="form-group">
@@ -143,11 +112,10 @@ const EditMovie = ({ saveMovie }) => {
             type="text"
             className="form-control form-control-lg"
             id="movieUrl"
-            value={movieFormState.movieUrl || ''}
-            onChange={handleInputChange}
+            {...formik.getFieldProps('movieUrl')}
           />
-          {dirtyControls.movieUrl && errors.movieUrl && (
-            <div className="field-error-message">{errors.movieUrl}</div>
+          {formik.touched.movieUrl && formik.errors.movieUrl && (
+            <div className="field-error-message">{formik.errors.movieUrl}</div>
           )}
         </div>
         <div className="form-group">
@@ -156,8 +124,7 @@ const EditMovie = ({ saveMovie }) => {
             multiple={true}
             className="form-control form-control-lg"
             id="genres"
-            value={movieFormState.genres}
-            onChange={handleInputChange}
+            onChange={handleMultiSelectValueChange}
           >
             {GENRES.map((genre) => (
               <option value={genre} key={genre}>
@@ -172,11 +139,10 @@ const EditMovie = ({ saveMovie }) => {
             rows="3"
             className="form-control form-control-lg"
             id="overview"
-            value={movieFormState.overview}
-            onChange={handleInputChange}
+            {...formik.getFieldProps('overview')}
           />
-          {dirtyControls.overview && errors.overview && (
-            <div className="field-error-message">{errors.overview}</div>
+          {formik.touched.overview && formik.errors.overview && (
+            <div className="field-error-message">{formik.errors.overview}</div>
           )}
         </div>
         <div className="form-group">
@@ -185,11 +151,10 @@ const EditMovie = ({ saveMovie }) => {
             type="number"
             className="form-control form-control-lg"
             id="runtime"
-            value={movieFormState.runtime}
-            onChange={handleInputChange}
+            {...formik.getFieldProps('runtime')}
           />
-          {dirtyControls.runtime && errors.runtime && (
-            <div className="field-error-message">{errors.runtime}</div>
+          {formik.touched.runtime && formik.errors.runtime && (
+            <div className="field-error-message">{formik.errors.runtime}</div>
           )}
         </div>
         {isFormErrorVisible && (
@@ -233,7 +198,7 @@ const EditMovie = ({ saveMovie }) => {
           <button
             type="submit"
             className="btn btn-danger btn-lg"
-            disabled={isFormInvalid}
+            disabled={!(formik.isValid && formik.dirty)}
           >
             SUBMIT
           </button>
