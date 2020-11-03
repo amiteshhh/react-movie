@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 import { MovieSearchBanner, MovieList, MovieDetails } from '.';
 
-export default class Home extends Component {
-  constructor() {
+class Home extends Component {
+  constructor(props) {
     super();
-    this.state = { query: '', movie: null };
+    const query = props.match.params.query || '';
+    this.state = { query, movie: null };
   }
 
   handleQueryChange = (query) => this.setState({ query });
@@ -39,3 +41,5 @@ export default class Home extends Component {
     );
   }
 }
+
+export default withRouter(Home);
