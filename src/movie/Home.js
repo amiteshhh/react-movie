@@ -4,8 +4,8 @@ import { MovieSearchBanner, MovieList, MovieDetails } from '.';
 
 class Home extends Component {
   constructor(props) {
-    super();
-    const query = props.match.params.query || '';
+    super(props);
+    const { query = '' } = props.match.params;
     this.state = { query, movie: null };
   }
 

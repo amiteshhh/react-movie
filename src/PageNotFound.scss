@@ -1,0 +1,12 @@
+.page-not-found-container {
+  height: calc(100vh - 78px);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+
+  .page-not-found-heading {
+    padding-bottom: 50px;
+  }
+}

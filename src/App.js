@@ -15,7 +15,7 @@ function App() {
         <div className="route-wrapper">
           <Switch>
             <Route path="/" component={Home} exact />
-            <Route path="/search/:query" component={Home} />
+            <Route path="/search/:query?" component={Home} exact />
             <Route path="/movie/:id" component={EditMovie} />
             <Route path="*" component={PageNotFound} exact />
           </Switch>
