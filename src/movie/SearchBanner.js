@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import './SearchBanner.scss';
 
 const MovieSearchBanner = (props) => {
-  const [query, setQuery] = useState('');
+  const initialQuery = useParams().query || '';
+  const [query, setQuery] = useState(initialQuery);
   const handleSubmit = (event) => {
     event.preventDefault();
     props.onQueryChange(query);

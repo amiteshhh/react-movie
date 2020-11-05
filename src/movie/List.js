@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import MovieCard from './Card';
@@ -28,6 +28,9 @@ const mapDispatchToProps = {
 class MovieList extends Component {
   constructor(props) {
     super(props);
+    if (props.query) {
+      this.handleQueryChange();
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -38,7 +41,10 @@ class MovieList extends Component {
 
   /** Filter movie by given query text, then reset the genre to `All` and finally sort it */
   handleQueryChange() {
-    this.props.filterMoviesByQuery(this.props.query);
+    const { query } = this.props;
+    const newPath = `/search/${query}`;
+    history.replaceState(null, '', newPath);
+    this.props.filterMoviesByQuery(query);
   }
 
   /**
