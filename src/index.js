@@ -5,7 +5,7 @@ import store from './redux/store';
 import App from './App';
 
 import './index.scss';
-ReactDOM.render(
+ReactDOM.hydrate(
   <React.StrictMode>
     <Provider store={store}>
       <App />
