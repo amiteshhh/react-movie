@@ -17,13 +17,12 @@ const EditMovie = ({ saveMovie }) => {
   const [isFormErrorVisible, setIsFormErrorVisible] = useState(false);
   const [isSubmitSuccessVisible, setIsSubmitSuccessVisible] = useState(false);
 
-  let { id } = useParams();
+  let { id = 'add' } = useParams();
   const isAddMovie = id === 'add';
   id = Number(id); // string to numeric convrsion to match the data type with mock record
   const movieDetails = isAddMovie ? EMPTY_MOVIE_FORM_DATA : getMovieById(id);
 
   movieDetails.movieUrl = movieDetails.movieUrl || ''; // prop missing in response
-
   const getMultiSelectValue = (target) =>
     [...target.selectedOptions].map((option) => option.value);
 

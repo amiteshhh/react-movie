@@ -11,7 +11,7 @@ import {
   DELETE_MOVIE,
 } from '../actionTypes';
 
-const initialState = {
+export const initialState = {
   allMovies: MOVIE_LIST,
   movies: MOVIE_LIST,
   activeGenre: DEFAULT_GENRE,
@@ -27,7 +27,7 @@ export default (state = initialState, action) => {
       return { ...state, ...action.payload };
     case DELETE_MOVIE:
       const movieToDelete = action.payload;
-      const movies = { state };
+      const { movies } = state;
       const index = movies.findIndex((movie) => movie === movieToDelete);
       movies.splice(index, 1);
       return { ...state };
